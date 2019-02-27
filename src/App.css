@@ -1,0 +1,112 @@
+body{
+   background: #f9f9f9;
+}
+.form-group{
+    margin-bottom: 0px;
+}
+.actions{
+    margin-top: 6px;
+    width: 100%;
+}
+
+.dropdown-toggle::after {
+    display:none;
+}
+.modal-header{
+    padding: 0.5rem 1rem;  
+}
+.modal-title.h4{
+    font-size: 18px;
+}
+.navbar{
+    padding: .35rem 1rem;
+}
+.row{
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.colstask{
+    background: #e6eaec;
+    margin: 0px 2px;
+    padding-right: 0; 
+    padding-left: 0; 
+    border-radius: 3px;
+    height: 100%;
+}
+
+.colstask .bloc{
+    max-height: calc(100vh - 4em - 26px);   
+    overflow:scroll;
+    overflow-x: hidden;
+}
+
+.colstask ::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+.colstask ::-webkit-scrollbar-track {
+    background: #ddd; 
+}
+
+/* Handle */
+.colstask::-webkit-scrollbar-thumb {
+    background: #ddd; 
+}
+
+/* Handle on hover */
+.colstask ::-webkit-scrollbar-thumb:hover {
+    background: #ccc; 
+}
+
+.colstask .title{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #313131;
+}
+
+.font-awesome-drop{
+    margin-right: 8px;
+}
+.input-group{
+    margin-bottom: 0.5rem!important;
+}
+.text-description{
+   
+}
+
+.list-group{
+    margin: 4px;
+}
+.card{
+    margin-bottom: 6px;
+}
+
+.card-title {
+    margin-bottom: 0;
+}
+
+.card-title.h5 {
+    font-size: 16px;
+}
+.card-text{
+    color: #888888;
+    font-size: 0.8rem;
+}
+
+.card-body {
+    padding: 6px;
+}
+.card-footer{
+    padding: 0;
+}
+.button-trash {
+    float: right;
+}
+.button-trash .fa-trash-alt{    
+    color: #cccccc;
+}
+
