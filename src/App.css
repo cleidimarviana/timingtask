@@ -1,5 +1,5 @@
 body{
-   background: #f9f9f9;
+   /* background: #f9f9f9; */
 }
 .form-group{
     margin-bottom: 0px;
@@ -23,16 +23,16 @@ body{
 }
 .row{
     margin-right: 0;
-    margin-left: 0;
+    margin-left: 0;    
 }
 
 .colstask{
-    background: #e6eaec;
     margin: 0px 2px;
     padding-right: 0; 
     padding-left: 0; 
     border-radius: 3px;
     height: 100%;
+    /* border: 1px solid #ccc; */
 }
 
 .colstask .bloc{
@@ -42,12 +42,12 @@ body{
 }
 
 .colstask ::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
 }
 
 /* Track */
 .colstask ::-webkit-scrollbar-track {
-    background: #ddd; 
+    background: #fff; 
 }
 
 /* Handle */
@@ -74,15 +74,17 @@ body{
 .input-group{
     margin-bottom: 0.5rem!important;
 }
-.text-description{
-   
-}
-
 .list-group{
     margin: 4px;
 }
 .card{
     margin-bottom: 6px;
+    border: none;
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.05), 0 1px 1px 0 rgba(0, 0, 0, 0.05);
+}
+.card:hover{
+    /* background: #fafafa; */
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.15), 0 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .card-title {
@@ -93,7 +95,7 @@ body{
     font-size: 16px;
 }
 .card-text{
-    color: #888888;
+    color: #585858;
     font-size: 0.8rem;
 }
 
@@ -102,6 +104,8 @@ body{
 }
 .card-footer{
     padding: 0;
+    background-color: #00000005;
+    border-top: none;
 }
 .button-trash {
     float: right;
