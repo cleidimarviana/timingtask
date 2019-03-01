@@ -28,7 +28,7 @@ class Toolbar extends Component {
         return (
             <div>
                 <Navbar bg="dark">
-                    <Navbar.Brand style={{ color: '#dedede' }} href="#home">TimingTask</Navbar.Brand>
+                    <Navbar.Brand style={{ color: '#dedede' }} href="/">TimingTask</Navbar.Brand>
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end">
 
@@ -46,9 +46,9 @@ class Toolbar extends Component {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu >
-                                    <Dropdown.Item>
+                                    <Dropdown.Item href="/relatorios">
                                         <FontAwesomeIcon icon={faCog} size="sm" /> Gerar Relatório
-                                </Dropdown.Item>
+                                  </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </ButtonToolbar>
