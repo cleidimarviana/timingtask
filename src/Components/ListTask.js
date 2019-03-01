@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Button, ListGroup, Dropdown, Form, Row, Col, Card, Modal, InputGroup, FormControl, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Button, ListGroup, Dropdown, Row, Col, Card, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faTrashAlt, faThumbsUp, faFlag, faStream } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faThumbsUp, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment';
-
 import './../App.css';
-import Moment from 'react-moment';
+import EditTask from './EditTask';
 
 class ListTask extends Component {
 
@@ -14,22 +13,22 @@ class ListTask extends Component {
     constructor(props) {
         super(props);
 
-        this.handleModalEditShow = this.handleModalEditShow.bind(this);
-        this.handleModalEditClose = this.handleModalEditClose.bind(this);
+        this.handleShow = this.handleShow.bind(this);
+        this.handleClose = this.handleClose.bind(this);
 
         this.state = {
-            showModalEdit: false,
+            show: false,
+            task: {}
         };
     }
 
-    handleModalEditClose() {
-        this.setState({ showModalEdit: false });
+    handleClose() {
+        this.setState({ show: false });
     }
 
-    handleModalEditShow() {
-        this.setState({ showModalEdit: true });
+    handleShow(task) {
+        this.setState({ show: true, task: task });
     }
-
     getPriorityLevelColor = (priority) => {
         if (priority === 2) {
             return { borderColor: this.colors[3] };
@@ -102,6 +101,31 @@ class ListTask extends Component {
         this.props.updateList();
     }
 
+    handleDuplicate = (item) => {
+
+        let arrTask = this.getLocalData();
+
+        for (var i = 0; i < arrTask.length; i++) {
+            if (arrTask[i].id === item.id) {
+                let data = {
+                    id: moment().format('YYMMDDHms'),
+                    title: item.title,
+                    description: item.description,
+                    priority: item.priority,
+                    date_creation: moment().format(),
+                    date_start: "",
+                    date_pause: "",
+                    date_finish: ""
+                }
+                arrTask.push(data);
+                break;
+            }
+        }
+        this.setLocalData(arrTask);
+        this.props.updateList();
+    }
+
+
     getLocalData = () => {
         return JSON.parse(localStorage.getItem('tasks'));
     }
@@ -109,9 +133,6 @@ class ListTask extends Component {
         localStorage.setItem('tasks', JSON.stringify(arr));
     }
 
-    handleDetails = (item) => {
-
-    }
 
     render() {
         return (
@@ -127,7 +148,7 @@ class ListTask extends Component {
                                     })).map((task) => {
                                         if ((task.date_start === "" || task.date_start === undefined) || task.date_pause !== "") {
                                             return <Card style={{ borderColor: this.colors[task.priority - 1] }} variant={this.getPriorityLevelColor(task.priority)}>
-                                                <Card.Body onClick={this.handleModalEditShow}>
+                                                <Card.Body onDoubleClick={() => this.handleShow(task)}>
                                                     <Card.Title>{task.title}</Card.Title>
                                                     <Card.Text>
                                                         {task.description}
@@ -137,9 +158,27 @@ class ListTask extends Component {
                                                     <Button variant="link" onClick={() => this.handleIniciar(task)} size="sm">
                                                         <FontAwesomeIcon icon={faPlay} size="xs" />
                                                     </Button>
-                                                    <Button className="button-trash" variant="link" onClick={() => this.handleRemove(task)} size="sm">
-                                                        <FontAwesomeIcon icon={faTrashAlt} size="xs" />
-                                                    </Button>
+                                                    <Dropdown
+                                                        style={{ float: 'right' }}
+                                                        alignRight
+                                                        title="Dropdown right"
+                                                        id="dropdown-menu-align-right" >
+                                                        <Dropdown.Toggle variant="link" size="sm">
+                                                            <FontAwesomeIcon icon={faEllipsisV} size="xs" />
+                                                        </Dropdown.Toggle>
+
+                                                        <Dropdown.Menu >
+                                                            <Dropdown.Item onClick={() => this.handleShow(task)}>
+                                                                Editar tarefa
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => this.handleDuplicate(task)}>
+                                                                Duplicar tarefa
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => this.handleRemove(task)}>
+                                                                Excluir tarefa
+                                                            </Dropdown.Item>
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
                                                 </Card.Footer>
                                             </Card>
                                         }
@@ -159,7 +198,7 @@ class ListTask extends Component {
                                     })).map((task) => {
                                         if (task.date_start !== "" && task.date_finish === "" && task.date_pause === "") {
                                             return <Card style={{ background: '#FFFAC0', borderColor: this.colors[task.priority - 1] }} variant={this.getPriorityLevelColor(task.priority)}>
-                                                <Card.Body onClick={this.handleModalEditShow}>
+                                                <Card.Body onDoubleClick={() => this.handleShow(task)}>
                                                     <Card.Title>{task.title}</Card.Title>
                                                     <Card.Text>
                                                         {task.description}
@@ -172,9 +211,28 @@ class ListTask extends Component {
                                                     <Button onClick={() => this.handleFinish(task)} variant="link" size="sm">
                                                         <FontAwesomeIcon icon={faThumbsUp} size="xs" />
                                                     </Button>
-                                                    <Button className="button-trash" variant="link" onClick={() => this.handleRemove(task)} size="sm">
-                                                        <FontAwesomeIcon icon={faTrashAlt} size="xs" />
-                                                    </Button>
+
+                                                    <Dropdown
+                                                        style={{ float: 'right' }}
+                                                        alignRight
+                                                        title="Dropdown right"
+                                                        id="dropdown-menu-align-right" >
+                                                        <Dropdown.Toggle variant="link" size="sm">
+                                                            <FontAwesomeIcon icon={faEllipsisV} size="xs" />
+                                                        </Dropdown.Toggle>
+
+                                                        <Dropdown.Menu >
+                                                            <Dropdown.Item onClick={() => this.handleModalEditShow(task)}>
+                                                                Editar tarefa
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => this.handleDuplicate(task)}>
+                                                                Duplicar tarefa
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => this.handleRemove(task)}>
+                                                                Excluir tarefa
+                                                            </Dropdown.Item>
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
                                                 </Card.Footer>
                                             </Card>
                                         }
@@ -194,16 +252,34 @@ class ListTask extends Component {
                                     })).map((task) => {
                                         if (task.date_finish !== "") {
                                             return <Card style={{ borderColor: this.colors[task.priority - 1] }} variant={this.getPriorityLevelColor(task.priority)}>
-                                                <Card.Body onClick={this.handleModalEditShow}>
+                                                <Card.Body onDoubleClick={() => this.handleShow(task)}>
                                                     <Card.Title>{task.title}</Card.Title>
                                                     <Card.Text>
                                                         {task.description}
                                                     </Card.Text>
                                                 </Card.Body>
                                                 <Card.Footer >
-                                                    <Button className="button-trash" variant="link" onClick={() => this.handleRemove(task)} size="sm">
-                                                        <FontAwesomeIcon icon={faTrashAlt} size="xs" />
-                                                    </Button>
+                                                    <Dropdown
+                                                        style={{ float: 'right' }}
+                                                        alignRight
+                                                        title="Dropdown right"
+                                                        id="dropdown-menu-align-right" >
+                                                        <Dropdown.Toggle variant="link" size="sm">
+                                                            <FontAwesomeIcon icon={faEllipsisV} size="xs" />
+                                                        </Dropdown.Toggle>
+
+                                                        <Dropdown.Menu >
+                                                            <Dropdown.Item onClick={() => this.handleModalEditShow(task)}>
+                                                                Editar tarefa
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => this.handleDuplicate(task)}>
+                                                                Duplicar tarefa
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => this.handleRemove(task)}>
+                                                                Excluir tarefa
+                                                            </Dropdown.Item>
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
                                                 </Card.Footer>
                                             </Card>
                                         }
@@ -214,61 +290,18 @@ class ListTask extends Component {
                         </div>
                     </Col>
                 </Row>
-                <Modal show={this.state.showModalEdit} onHide={this.handleModalEditClose}>
+                <Modal
+                    backdrop="static"
+                    show={this.state.show}
+                    onHide={this.handleClose}>
+
                     <Modal.Header closeButton>
                         <Modal.Title>Editar Tarefa</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form>
-
-                            <InputGroup className="mb-3">
-                                <Form.Control type="text" placeholder="Por exemplo: terminar de escrever GMUD" ref={((a) => { this.reTaskTitle = a })} />
-                            </InputGroup>
-
-                            <InputGroup className="text-description" >
-                                <FormControl  as="textarea" placeholder="Adicione uma descrição mais tetalhada..." aria-label="With textarea" />
-                            </InputGroup>
-
-                            <div className="actions">
-                       
-                                <OverlayTrigger placement="left" overlay={<Tooltip id="tooltip-disabled">Prioridade</Tooltip>}>
-                                    <Dropdown
-                                        style={{ float: 'right' }}
-                                        alignRight
-                                        title="Dropdown right"
-                                        id="dropdown-menu-align-right" >
-                                        <Dropdown.Toggle variant="light" size="sm">
-                                            <FontAwesomeIcon icon={faFlag} style={{ color: this.state.color }} />
-                                        </Dropdown.Toggle>
-
-                                        <Dropdown.Menu >
-                                            <Dropdown.Item >
-                                                <FontAwesomeIcon className="font-awesome-drop" icon={faFlag} style={{ color: this.colors[0] }} /> Alta
-                                        </Dropdown.Item>
-                                            <Dropdown.Item>
-                                                <FontAwesomeIcon className="font-awesome-drop" icon={faFlag} style={{ color: this.colors[1] }} />  Média
-                                        </Dropdown.Item>
-                                            <Dropdown.Item >
-                                                <FontAwesomeIcon className="font-awesome-drop" icon={faFlag} style={{ color: this.colors[2] }} />  Baixa
-                                        </Dropdown.Item>
-                                            <Dropdown.Item >
-                                                <FontAwesomeIcon className="font-awesome-drop" icon={faFlag} style={{ color: this.colors[3] }} />  Relevante
-                                        </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                </OverlayTrigger>
-
-                            </div>
-                        </Form>
+                        <EditTask handleClose={this.handleClose} task={this.state.task}/>
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="light" size="sm" onClick={this.handleModalEditClose}>
-                            Cancelar
-                        </Button>
-                        <Button variant="primary" size="sm" onClick={this.handleModalEditClose}>
-                            Salvar alterações
-                        </Button>
-                    </Modal.Footer>
+                   
                 </Modal>
             </div>
         );
